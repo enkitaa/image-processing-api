@@ -7,7 +7,11 @@ import morgan from 'morgan';
 const app = express();
 const port = 3000;
 
-app.use(morgan(':date[web] :method :url :status :response-time ms - :res[content-length]'))
+app.use(
+  morgan(
+    ':date[web] :method :url :status :response-time ms - :res[content-length]'
+  )
+);
 app.use('/api', routes);
 
 app.listen(port, () => {
