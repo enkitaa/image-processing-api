@@ -1,21 +1,26 @@
-import fs from 'fs';
-import sharp, { AvailableFormatInfo } from 'sharp';
+import { promises as fs } from 'fs';
+import sharp from 'sharp';
 
-export function resize(
-  path: string,
-  format: string,
-  width: number,
-  height: number
-) {
-  const readStream = fs.createReadStream(path);
-  let transform = sharp();
-  if (format) {
-    transform = transform.toFormat(format as unknown as AvailableFormatInfo);
+export async function resize(filename: string, width: number, height: number) {
+  const inpath: string = `assets/original/${filename}.jpg`;
+  const cachepath: string = `assets/thumbs/${filename}_${width}_${height}.jpg`;
+
+  try {
+    await fs.access(cachepath);
+    console.log('Serving pre-processed image');
+    return cachepath;
+  } catch {
+    let transform = sharp(inpath);
+    if (width || height) {
+      transform = transform.resize(width, height);
+    }
+    const file = transform.resize(width, height).toFormat('jpg').toBuffer();
+    try {
+      console.log('Caching image');
+      await fs.writeFile(cachepath, await file);
+      return cachepath;
+    } catch (error) {
+      console.log(`Cache failed:${error}`);
+    }
   }
-
-  if (width || height) {
-    transform = transform.resize(width, height);
-  }
-
-  return readStream.pipe(transform);
 }

@@ -1,21 +1,36 @@
 import express from 'express';
 import { resize } from '../../modules/resize';
+import path from 'path';
+
 const images = express.Router();
 
 //Request to serve processed image using resize module
-images.get('/', (req: express.Request, res: express.Response): void => {
-    const widthStr = req.query.width as string;
-    const heightStr = req.query.height as string;
-    const filename = req.query.filename as string;
+images.get(
+    '/',
+    async (req: express.Request, res: express.Response): Promise<void> => {
+        if (req.query.width && req.query.height && req.query.filename) {
+            const widthStr = req.query.width as string;
+            const heightStr = req.query.height as string;
+            const filename = req.query.filename as string;
 
-    let width: number = parseInt(widthStr),
-        height: number = parseInt(heightStr);
+            let width: number = parseInt(widthStr),
+                height: number = parseInt(heightStr);
 
-    res.type(`image/jpg`);
-    resize(`assets/original/${filename}.jpg`, 'jpg', width, height).pipe(res);
-    // .toFile('assets/thumbs/newFile.jpg');
-
-    /*Todo - 1) Add caching*/
-});
+            resize(filename, width, height)
+                .then((cachepath) => {
+                    res.type('image/jpg');
+                    res.sendFile(`${path.resolve(cachepath as string)}`);
+                    return;
+                })
+                .catch((err) =>
+                    res.send(
+                        `${err.code}: Please provide filename available in assets & proper dimensions`
+                    )
+                );
+        } else {
+            res.send('Please provide proper query parameters');
+        }
+    }
+);
 
 export default images;
