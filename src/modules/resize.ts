@@ -1,9 +1,13 @@
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
 
-export async function resize(filename: string, width: number, height: number) {
-  const inpath: string = `assets/original/${filename}.jpg`;
-  const cachepath: string = `assets/thumbs/${filename}_${width}_${height}.jpg`;
+export async function resize(
+  filename: string,
+  width: number,
+  height: number
+): Promise<string | unknown> {
+  const inpath = `assets/original/${filename}.jpg`;
+  const cachepath = `assets/thumbs/${filename}_${width}_${height}.jpg`;
 
   try {
     await fs.access(cachepath);

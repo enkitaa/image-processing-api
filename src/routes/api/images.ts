@@ -13,7 +13,7 @@ images.get(
       const heightStr = req.query.height as string;
       const filename = req.query.filename as string;
 
-      let width: number = parseInt(widthStr),
+      const width: number = parseInt(widthStr),
         height: number = parseInt(heightStr);
 
       resize(filename, width, height)
