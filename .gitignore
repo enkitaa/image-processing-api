@@ -103,5 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# cached files
-assets/thumbs
+# packagelock
+package-lock.json
