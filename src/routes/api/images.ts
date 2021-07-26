@@ -24,7 +24,7 @@ images.get(
         })
         .catch((err) =>
           res.send(
-            `${err.code}: Please provide filename available in assets & proper dimensions`
+            `${err}, Please provide filename available in assets & proper dimensions`
           )
         );
     } else {

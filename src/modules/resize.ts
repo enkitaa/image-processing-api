@@ -25,6 +25,7 @@ export async function resize(
       return cachepath;
     } catch (error) {
       console.log(`Cache failed:${error}`);
+      return Promise.reject(error);
     }
   }
 }
