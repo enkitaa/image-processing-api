@@ -14,9 +14,6 @@ describe('Test resizing function', () => {
     let writeSpy = spyOn(fs, 'writeFile');
     await resize(filename, width, height);
     expect(writeSpy).toHaveBeenCalled();
-  });
-  it('gives error when input file not present', async () => {
-    filename = 'abc';
-    expect(await resize(filename, width, height)).toThrowError;
+    expect(await resize(filename, width, height)).toBeTruthy;
   });
 });

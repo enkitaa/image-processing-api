@@ -24,4 +24,11 @@ describe('Test endpoint responses', () => {
     expect(response.status).toBe(200);
     expect(response.type).toBe('image/jpg');
   });
+  it('gets gets error when input file not present', async () => {
+    const response = await request.get(
+      '/api/images?filename=abc&height=500&width=500'
+    );
+    expect(response.status).toBe(200);
+    expect(response.text).toBe('Error: Input file is missing, Please provide filename available in assets & proper dimensions');
+  });
 });
